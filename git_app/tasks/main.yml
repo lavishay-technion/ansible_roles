@@ -1,0 +1,23 @@
+---
+
+- name: Ensure the destination directory does not exist
+  file:
+    path: "{{PROJECT_DEST}}"
+    state: absent
+  become: true
+
+- name: Clone details_ansible_app from github brance
+  ansible.builtin.git:
+    repo: "{{GIT_REPO}}"
+    dest: "{{PROJECT_DEST}}"
+    version: "{{GIT_VERSION}}"
+  register: git_result
+
+- name: Debug git
+  debug:
+    var: git_result
+
+- name: Change {{PROJECT_DEST}} permissions
+  command: 
+    cmd: "chmod -R 777 {{PROJECT_DEST}}"
+  become: true

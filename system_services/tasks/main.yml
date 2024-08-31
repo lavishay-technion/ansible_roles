@@ -1,0 +1,42 @@
+---
+# tasks file for system_services
+- name: Manage system package and service
+  block:
+    - name: Install system_service package
+      package:
+        name: system_service
+        state: present
+      become: true
+
+    - name: Validate system_service is enabled and started
+      service:
+        name: system_service
+        state: started
+        enabled: true
+      become: true
+
+    - name: Print the status of system_service
+      command: systemctl status system_service
+      register: service_status
+      become: true
+
+    - name: Display the status of system_service
+      debug:
+        msg: "{{ service_status.stdout }}"
+        
+  rescue:
+    - name: Rollback - Stop system_service if installation fails
+      service:
+        name: system_service
+        state: stopped
+      become: true
+
+    - name: Rollback - Uninstall system_service package if installation fails
+      package:
+        name: system_service
+        state: absent
+      become: true
+
+    - name: Notify about the failure
+      debug:
+        msg: "An error occurred. system_service has been rolled back."

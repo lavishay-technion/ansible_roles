@@ -1,0 +1,5 @@
+---
+# vars file for git_app
+GIT_REPO: git@github.com:orinahum/Ansible_Details_App.git
+GIT_VERSION: main
+PROJECT_DEST: /tmp/docker_compose_files/

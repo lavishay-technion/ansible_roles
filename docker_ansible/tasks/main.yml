@@ -1,0 +1,22 @@
+---
+
+- name: Copying files 2 {{PROJECT_SRC}}
+  copy:
+    src: docker_ansible/files/
+    dest: "{{PROJECT_SRC}}"
+    remote_src: true
+
+- name: Deploy template build.j2
+  template:
+    src: docker_ansible/templates/build.j2
+    dest: "{{PROJECT_SRC}}build.sh"
+    remote_src: true
+    mode: +x
+  notify: "run build.sh"
+
+- name: Deploy template docker-compose.j2
+  template:
+    src: docker_ansible/templates/docker-compose.j2
+    dest: "{{PROJECT_SRC}}docker-compose.yaml"
+    remote_src: true
+  notify: "run docker-compose.yaml"
